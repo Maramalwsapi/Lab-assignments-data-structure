@@ -1,0 +1,238 @@
+{\rtf1\fbidis\ansi\ansicpg1256\deff0\nouicompat\deflang9217{\fonttbl{\f0\fnil\fcharset0 Calibri;}{\f1\fnil\fcharset178 Calibri;}{\f2\fnil Calibri;}{\f3\fnil\fcharset0 Arial;}}
+{\colortbl ;\red0\green77\blue187;}
+{\*\generator Riched20 10.0.19041}\viewkind4\uc1 
+\pard\ltrpar\sa160\sl259\slmult0\cf1\i\f0\fs32\lang1033 1\f1\rtlch\lang9217\\ \f0\ltrch\lang1033 develop an implementation of the equals method in the context of the SinglyLinkedList class\f1\rtlch\lang9217 ?\f0\ltrch\lang1033\par
+\cf0\b\i0\fs24\par
+public class SinglyLinkedList<T> \{\par
+\par
+    private Node<T> head;\par
+\par
+    // ... other methods for the SinglyLinkedList class\par
+\par
+    @Override\par
+    public boolean equals(Object obj) \{\par
+        if (this == obj) \{\par
+            return true;\par
+        \}\par
+\par
+        if (obj == null || getClass() != obj.getClass()) \{\par
+            return false;\par
+        \}\par
+\par
+        SinglyLinkedList<T> otherList = (SinglyLinkedList<T>) obj;\par
+\par
+        Node<T> currentNode = head;\par
+        Node<T> otherCurrentNode = otherList.head;\par
+\par
+        while (currentNode != null && otherCurrentNode != null) \{\par
+            if (!currentNode.data.equals(otherCurrentNode.data)) \{\par
+                return false;\par
+            \}\par
+\par
+            currentNode = currentNode.next;\par
+            otherCurrentNode = otherCurrentNode.next;\par
+        \}\par
+\par
+        // Check if both lists reached the end at the same time\par
+        return currentNode == null && otherCurrentNode == null;\par
+    \}\par
+\par
+    private static class Node<T> \{\par
+        T data;\par
+        Node<T> next;\par
+\par
+        Node(T data) \{\par
+            this.data = data;\par
+            this.next = null;\par
+        \}\par
+    \}\par
+\}\par
+\b0\fs22 ******************************************************************************\par
+
+\pard\ltrpar\li283\sl276\slmult1\cf1\i\fs32 2\\ Give an algorithm for finding the second-to-last node in a singly linked list in which the last node is indicated by a null next reference.?\par
+\par
+\cf0\b\i0\fs24 public class SinglyLinkedList<T> \{\par
+    private Node<T> head;\par
+\par
+    public Node<T> findSecondToLastNode() \{\par
+        Node<T> current = head;\par
+\par
+        Node<T> secondToLast = null;\par
+        Node<T> last = null;\par
+\par
+        while (current != null) \{\par
+            if (last != null) \{\par
+                secondToLast = last;\par
+            \}\par
+\par
+            last = current;\par
+            current = current.next;\par
+        \}\par
+\par
+        return secondToLast;\par
+    \}\par
+\par
+\}\par
+\par
+class Node<T> \{\par
+    T data;\par
+    Node<T> next;\par
+\par
+    public Node(T data) \{\par
+        this.data = data;\par
+        this.next = null;\par
+    \}\par
+\}\par
+
+\pard\ltrpar\sa160\sl259\slmult0\b0\fs22 ******************************************************************************\ul\fs28\par
+
+\pard\ltrpar\li283\sl276\slmult1\cf1\ulnone\i\fs32 3\\Give an implementation of the size( ) method for the SingularlyLinkedList class, assuming that we did not maintain size as?\par
+\par
+\cf0\b\i0\fs28 public class SinglyLinkedList<T> \{\par
+\par
+    private Node<T> head;\par
+\par
+    // ... other methods for the SinglyLinkedList class\par
+\par
+    public int size() \{\par
+        int count = 0;\par
+        Node<T> current = head;\par
+\par
+        while (current != null) \{\par
+            count++;\par
+            current = current.next;\par
+        \}\par
+\par
+        return count;\par
+    \}\par
+\par
+    private static class Node<T> \{\par
+        T data;\par
+        Node<T> next;\par
+\par
+        Node(T data) \{\par
+            this.data = data;\par
+            this.next = null;\par
+        \}\par
+    \}\par
+\}\par
+
+\pard\ltrpar\sl276\slmult1\cf1\b0\i\fs32 4\\Implement a rotate( ) method in the SinglyLinkedList class, which has semantics equal to addLast(removeFirst( )), yet without creating any new node. \par
+\par
+
+\pard\ltrpar\li283\sl276\slmult1\cf0\b\i0\fs28 public class SinglyLinkedList<T> \{\par
+\par
+    private Node<T> head;\par
+\par
+    // ... other methods for the SinglyLinkedList class\par
+\par
+    public void rotate() \{\par
+        if (head == null || head.next == null) \{\par
+            // List is empty or has only one node, no rotation needed\par
+            return;\par
+        \}\par
+\par
+        Node<T> secondNode = head.next;\par
+        Node<T> current = head;\par
+\par
+        while (current.next != null) \{\par
+            current = current.next;\par
+        \}\par
+\par
+        // Set the last node's next reference to the head\par
+        current.next = head;\par
+        // Update the head to the second node\par
+        head = secondNode;\par
+        // Set the new last node's next reference to null\par
+        current.next.next = null;\par
+    \}\par
+\par
+    private static class Node<T> \{\par
+        T data;\par
+        Node<T> next;\par
+\par
+        Node(T data) \{\par
+            this.data = data;\par
+            this.next = null;\par
+        \}\par
+    \}\par
+\}\par
+
+\pard\ltrpar\sa160\sl259\slmult0\b0\fs22 ******************************************************************************\fs28\par
+
+\pard\ltrpar\li283\sl276\slmult1\cf1\i\fs32 5\\Describe an algorithm for concatenating two singly linked lists L and M, into a single list L\f2\u8242? \f0 that contains all the nodes of L followed by all the nodes of M.\par
+\par
+\cf0\b\i0\fs28 public class SinglyLinkedList<T> \{\par
+    private Node<T> head;\par
+\par
+    public SinglyLinkedList<T> concatenateLists(SinglyLinkedList<T> list1, SinglyLinkedList<T> list2) \{\par
+        SinglyLinkedList<T> concatenatedList = new SinglyLinkedList<>();\par
+\par
+        if (list1.head == null) \{\par
+            concatenatedList.head = copyList(list2.head);\par
+            return concatenatedList;\par
+        \} else if (list2.head == null) \{\par
+            concatenatedList.head = copyList(list1.head);\par
+            return concatenatedList;\par
+        \}\par
+\par
+        concatenatedList.head = copyList(list1.head);\par
+\par
+        Node<T> current = concatenatedList.head;\par
+        while (current.next != null) \{\par
+            current = current.next;\par
+        \}\par
+\par
+        current.next = copyList(list2.head);\par
+\par
+        return concatenatedList;\par
+    \}\par
+\par
+    private Node<T> copyList(Node<T> head) \{\par
+        if (head == null) \{\par
+            return null;\par
+        \}\par
+\par
+        Node<T> newHead = new Node<>(head.data);\par
+        Node<T> currentNew = newHead;\par
+        Node<T> currentOld = head.next;\par
+\par
+        while (currentOld != null) \{\par
+            currentNew.next = new Node<>(currentOld.data);\par
+            currentNew = currentNew.next;\par
+            currentOld = currentOld.next;\par
+        \}\par
+\par
+        return newHead;\par
+    \}\par
+\par
+\par
+\}\par
+
+\pard\ltrpar\sa160\sl259\slmult0\b0\fs22 ******************************************************************************\par
+\cf1\i\fs32 6\\Describe in detail an algorithm for reversing a singly linked list L using only a constant amount of additional space?\par
+\b\fs36\par
+\cf0\i0\fs24 public class SinglyLinkedList<T> \{\par
+    private Node<T> head;\par
+\par
+    public void reverseInPlace() \{\par
+        Node<T> current = head;\par
+        Node<T> previous = null;\par
+        Node<T> next = null;\par
+\par
+        while (current != null) \{\par
+            next = current.next; // \par
+            current.next = previous; // \par
+\par
+            previous = current;\par
+            current = next;\par
+        \}\par
+\par
+        head = previous;\par
+    \}\par
+\}\par
+________________________________________________________________________\par
+
+\pard\rtlpar\sa200\sl276\slmult1\qr\b0\f3\fs22\par
+}
+ 

@@ -1,0 +1,301 @@
+{\rtf1\fbidis\ansi\ansicpg1256\deff0\nouicompat\deflang9217{\fonttbl{\f0\fnil\fcharset0 Arial;}{\f1\fnil\fcharset178 Arial;}{\f2\fnil Arial;}{\f3\fnil\fcharset0 Calibri;}}
+{\colortbl ;\red0\green77\blue187;}
+{\*\generator Riched20 10.0.19041}\viewkind4\uc1 
+\pard\ltrpar\sl276\slmult1\cf1\i\fs28\lang1033 1\f1\rtlch\lang9217\\ \f0\ltrch\lang1033 Describe a method for finding the middle node of a doubly linked list with header and trailer sentinels by \f2\lang9217\ldblquote\f0\lang1033 link hopping\f1\rtlch\lang9217 ,\f2\ltrch\rdblquote\lang1033  \f0 and without relying on explicit knowledge of the size of the list. In the case of an even number of nodes, report the node slightly left of center as the \f2\lang9217\ldblquote\f0\lang1033 middle\f1\rtlch\lang9217 .\f2\ltrch\rdblquote\f0\lang1033\par
+\cf0\i0\fs22\par
+\fs24 public Node<T> findMiddleNode() \{\par
+    Node<T> slow = header.next;\par
+    Node<T> fast = header.next;\par
+\par
+    while (fast != trailer && fast.next != trailer) \{\par
+        fast = fast.next.next;\par
+        slow = slow.next;\par
+    \}\par
+\par
+    return slow;\par
+\}\par
+************************************************************************************************\par
+\par
+\cf1\i\fs28 2\\ Give an implementation of the size( ) method for the DoublyLinkedList class, assuming that we did not maintain size as an instance variable.\par
+\par
+\cf0\i0\fs24 public class DoublyLinkedList<T> \{\par
+\par
+    private Node<T> header;\par
+    private Node<T> trailer;\par
+\par
+    // ... other methods for the DoublyLinkedList class\par
+\par
+    public int size() \{\par
+        int count = 0;\par
+        Node<T> current = header.next;\par
+\par
+        while (current != trailer) \{\par
+            count++;\par
+            current = current.next;\par
+        \}\par
+\par
+        return count;\par
+    \}\par
+\par
+    private static class Node<T> \{\par
+        T data;\par
+        Node<T> prev;\par
+        Node<T> next;\par
+\par
+        Node(T data, Node<T> prev, Node<T> next) \{\par
+            this.data = data;\par
+            this.prev = prev;\par
+            this.next = next;\par
+        \}\par
+    \}\par
+\}\par
+\b ************************************************************************************************\par
+\b0\fs22\par
+\cf1\i\fs32 3\\ Implement the equals( ) method for the DoublyLinkedList class.\par
+\cf0\i0\fs22 public class DoublyLinkedList<T> \{\par
+\par
+    private Node<T> header;\par
+    private Node<T> trailer;\par
+\par
+    // ... other methods for the DoublyLinkedList class\par
+\par
+    @Override\par
+    public boolean equals(Object obj) \{\par
+        if (this == obj) \{\par
+            return true;\par
+        \}\par
+\par
+        if (obj == null || getClass() != obj.getClass()) \{\par
+            return false;\par
+        \}\par
+\par
+        DoublyLinkedList<?> otherList = (DoublyLinkedList<?>) obj;\par
+\par
+        if (size() != otherList.size()) \{\par
+            return false;\par
+        \}\par
+\par
+        Node<T> currentThis = header.next;\par
+        Node<?> currentOther = otherList.header.next;\par
+\par
+        while (currentThis != trailer) \{\par
+            if (!currentThis.data.equals(currentOther.data)) \{\par
+                return false;\par
+            \}\par
+\par
+            currentThis = currentThis.next;\par
+            currentOther = currentOther.next;\par
+        \}\par
+\par
+        return true;\par
+    \}\par
+\par
+    private static class Node<T> \{\par
+        T data;\par
+        Node<T> prev;\par
+        Node<T> next;\par
+\par
+        Node(T data, Node<T> prev, Node<T> next) \{\par
+            this.data = data;\par
+            this.prev = prev;\par
+            this.next = next;\par
+        \}\par
+    \}\par
+\}\par
+\b\fs24 ************************************************************************************************\par
+\b0\fs22\par
+\cf1\i\fs28 4\\ Give an algorithm for concatenating two doubly linked lists L and M, with header and trailer sentinel nodes, into a single list L\f2\u8242?\f0 .\par
+\par
+\cf0\i0\fs24 public DoublyLinkedList<T> concatenateLists(DoublyLinkedList<T> L, DoublyLinkedList<T> M) \{\par
+    if (L.isEmpty()) \{\par
+        return M;\par
+    \}\par
+\par
+    if (M.isEmpty()) \{\par
+        return L;\par
+    \}\par
+\par
+    Node<T> lastNodeL = L.trailer.prev;\par
+    Node<T> firstNodeM = M.header.next;\par
+\par
+    lastNodeL.next = firstNodeM;\par
+    firstNodeM.prev = lastNodeL;\par
+\par
+    Node<T> lastNodeM = M.trailer.prev;\par
+    lastNodeM.next = L.trailer;\par
+    L.trailer.prev = lastNodeM;\par
+\par
+    return L;\par
+\}\par
+\b ************************************************************************************************\par
+\b0\par
+\cf1\i\fs28 5\\ Our implementation of a doubly linked list relies on two sentinel nodes, header and trailer, but a single sentinel node that guards both ends of the list should suffice. Reimplement the DoublyLinkedList class using only one sentinel node.\par
+\par
+\cf0\i0\fs24 public class DoublyLinkedList<T> \{\par
+\par
+    private Node<T> sentinel;\par
+\par
+    public DoublyLinkedList() \{\par
+        sentinel = new Node<>(null);\par
+        sentinel.next = sentinel;\par
+        sentinel.prev = sentinel;\par
+    \}\par
+\par
+    public boolean isEmpty() \{\par
+        return sentinel.next == sentinel;\par
+    \}\par
+\par
+    public void add(T element) \{\par
+        Node<T> newNode = new Node<>(element);\par
+        newNode.next = sentinel.next;\par
+        newNode.prev = sentinel;\par
+        sentinel.next.prev = newNode;\par
+        sentinel.next = newNode;\par
+    \}\par
+\par
+    public void remove(T element) \{\par
+        Node<T> current = sentinel.next;\par
+\par
+        while (current != sentinel) \{\par
+            if (current.data.equals(element)) \{\par
+                current.prev.next = current.next;\par
+                current.next.prev = current.prev;\par
+                break;\par
+            \}\par
+            current = current.next;\par
+        \}\par
+    \}\par
+\par
+    public void clear() \{\par
+        sentinel.next = sentinel;\par
+        sentinel.prev = sentinel;\par
+    \}\par
+\par
+    // ... other methods for the DoublyLinkedList class\par
+\par
+    private static class Node<T> \{\par
+        T data;\par
+        Node<T> prev;\par
+        Node<T> next;\par
+\par
+        Node(T data) \{\par
+            this.data = data;\par
+        \}\par
+    \}\par
+\b ************************************************************************************************\par
+\b0\par
+\cf1\i\fs28 6\\ Implement a circular version of a doubly linked list, without any sentinels, that supports all the public behaviors of the original as well as two new update methods, rotate( ) and rotateBackward.\par
+\par
+\cf0\i0\fs24 public class CircularDoublyLinkedList<T> \{\par
+\par
+    private Node<T> head;\par
+    private int size;\par
+\par
+    public CircularDoublyLinkedList() \{\par
+        head = null;\par
+        size = 0;\par
+    \}\par
+\par
+    public boolean isEmpty() \{\par
+        return size == 0;\par
+    \}\par
+\par
+    public int size() \{\par
+        return size;\par
+    \}\par
+\par
+    public void add(T element) \{\par
+        Node<T> newNode = new Node<>(element);\par
+\par
+        if (isEmpty()) \{\par
+            newNode.next = newNode;\par
+            newNode.prev = newNode;\par
+            head = newNode;\par
+        \} else \{\par
+            newNode.next = head;\par
+            newNode.prev = head.prev;\par
+            head.prev.next = newNode;\par
+            head.prev = newNode;\par
+        \}\par
+\par
+        size++;\par
+    \}\par
+\par
+    public void remove(T element) \{\par
+        if (isEmpty()) \{\par
+            return;\par
+        \}\par
+\par
+        Node<T> current = head;\par
+\par
+        do \{\par
+            if (current.data.equals(element)) \{\par
+                if (size == 1) \{\par
+                    head = null;\par
+                \} else \{\par
+                    current.prev.next = current.next;\par
+                    current.next.prev = current.prev;\par
+                    if (current == head) \{\par
+                        head = current.next;\par
+                    \}\par
+                \}\par
+                size--;\par
+                return;\par
+            \}\par
+            current = current.next;\par
+        \} while (current != head);\par
+    \}\par
+\par
+    public void clear() \{\par
+        head = null;\par
+        size = 0;\par
+    \}\par
+\par
+    public void rotate() \{\par
+        if (isEmpty()) \{\par
+            return;\par
+        \}\par
+\par
+        head = head.next;\par
+    \}\par
+\par
+    public void rotateBackward() \{\par
+        if (isEmpty()) \{\par
+            return;\par
+        \}\par
+\par
+        head = head.prev;\par
+    \}\par
+\par
+    // ... other methods and behaviors of the CircularDoublyLinkedList class\par
+\par
+    private static class Node<T> \{\par
+        T data;\par
+        Node<T> prev;\par
+        Node<T> next;\par
+\par
+        Node(T data) \{\par
+            this.data = data;\par
+            this.prev = null;\par
+            this.next = null;\par
+        \}\par
+    \}\par
+\}\par
+\cf1\i\fs28 7\\ Implement the clone( ) method for the DoublyLinkedList class.\par
+\cf0\i0\fs22 public DoublyLinkedList<T> clone() \{\par
+    DoublyLinkedList<T> clonedList = new DoublyLinkedList<>();\par
+\par
+    Node<T> current = header.next;\par
+\par
+    while (current != trailer) \{\par
+        clonedList.add(current.data);\par
+        current = current.next;\par
+    \}\par
+\par
+    return clonedList;\par
+\}\par
+________________________________________________________________________\par
+
+\pard\rtlpar\sa200\sl276\slmult1\qr\f3\lang9\par
+}
+ 
